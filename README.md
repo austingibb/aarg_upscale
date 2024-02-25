@@ -28,12 +28,12 @@ To be added later, as of now not supported. May be possible to do any combinatio
 
 Upscale all .avi files in a directory to 1080p and convert them to .mp4, keeping the original files:
 ```
-aarg_upscale -d some/directory -t 1080 -i .avi -o .mp4 -k
+python aarg_upscale.py -d some/directory -t 1080 -i .avi -o .mp4 -k
 ```
 
 Upscale a single video file to 720p and convert it to .mp4, removing the original file:
 ```
-aarg_upscale -p some/directory/video.avi -t 720 -o .mp4
+python aarg_upscale.py -p some/directory/video.avi -t 720 -o .mp4
 ```
 
 ## License
