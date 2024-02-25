@@ -9,8 +9,8 @@ The aarg_upscale repo hosts a Python command-line wrapper designed to upscale vi
 ## Prerequisites
 
 - Docker installed and running on your system.
+- Nvidia container toolkit.
 - Sudo privileges for running Docker commands.
-- Python 3.6 or newer.
 
 ## Installation
 
