@@ -3,7 +3,7 @@ The aarg_upscale repo hosts a Python command-line wrapper designed to upscale vi
 ## Features
 
 - Easy to use wrapper for video2x.
-- Option to keep the original files after upscaling.
+- Option to keep the original files or transparently replace after upscaling (transparent replacement is good for plex directories, where one may not want the old video files present).
 - Process an entire directory of video files or a single file.
 
 ## Prerequisites
