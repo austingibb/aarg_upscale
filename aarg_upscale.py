@@ -24,7 +24,7 @@ def upscale_video(input_path, height, keep_original, output_format, algorithm, m
             f' ghcr.io/k4yt3x/video2x:6.4.0'
             f' -i {quote_path("/input/" + filename)}'
             f' -o {quote_path("/output/" + temp_name)}'
-            f' -p {algorithm} -m {model} -h {height}'
+            f' -p {algorithm} --{algorithm}-model {model} -h {height}'
         )
 
         print(f"Upscaling {filename} to {height}p with {algorithm} ({model})...")
@@ -40,7 +40,7 @@ def upscale_video(input_path, height, keep_original, output_format, algorithm, m
         quoted_input_path = quote_path(os.path.basename(input_path))
         quoted_output_path = quote_path(os.path.basename(output_path))
 
-        docker_command = f'docker run --gpus all --rm -v {quote_path(input_directory)}:/host ghcr.io/k4yt3x/video2x:6.4.0 -i {quoted_input_path} -o {quoted_output_path} -p {algorithm} -m {model} -h {height}'
+        docker_command = f'docker run --gpus all --rm -v {quote_path(input_directory)}:/host ghcr.io/k4yt3x/video2x:6.4.0 -i {quoted_input_path} -o {quoted_output_path} -p {algorithm} --{algorithm}-model {model} -h {height}'
 
         print(f"Upscaling {filename} to {height}p with {algorithm} ({model})...")
         subprocess.run(docker_command, shell=True, check=True)
