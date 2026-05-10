@@ -19,7 +19,7 @@ The aarg_upscale repo hosts a Python command-line wrapper designed to upscale vi
    * Check installation with ```sudo docker run hello-world```
 2. Install nvidia container toolkit using the [official guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html). This allows gpu acceleration inside of the docker container.
 3. Pull latest docker image (see releases [here](https://github.com/k4yt3x/video2x/pkgs/container/video2x)).
-    * At the time of writing ```docker pull ghcr.io/k4yt3x/video2x:5.0.0-beta6```
+    * At the time of writing ```docker pull ghcr.io/k4yt3x/video2x:6.4.0```
 
 ### Other OS / GPUs
 To be added later, as of now not supported. May be possible to do any combination of [MacOS|Windows|Arch] OS and [AMD|Intel|Nvidia] GPU.
@@ -31,9 +31,14 @@ Upscale all .avi files in a directory to 1080p and convert them to .mp4, keeping
 python aarg_upscale.py -d some/directory -t 1080 -i .avi -o .mp4 -k
 ```
 
-Upscale a single video file to 720p and convert it to .mp4, removing the original file:
+Upscale a single video file to 720p using realcugan instead of the default realesrgan:
 ```
-python aarg_upscale.py -p some/directory/video.avi -t 720 -o .mp4
+python aarg_upscale.py -p some/directory/video.avi -t 720 -o .mp4 -a realcugan
+```
+
+Upscale with a specific model:
+```
+python aarg_upscale.py -p some/directory/video.avi -t 1080 -a realesrgan -m realesrgan-x4plus-anime
 ```
 
 ## License
