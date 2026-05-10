@@ -7,7 +7,7 @@ def quote_path(path):
     path = path.replace('\\', '/').rstrip('/')
     return f'"{path}"'
 
-def upscale_video(input_path, height, keep_original, output_format, algorithm, model, output_dir=None):
+def upscale_video(input_path, scale, keep_original, output_format, algorithm, model, output_dir=None):
     input_directory = os.path.dirname(input_path)
     filename = os.path.basename(input_path)
     file_root, file_extension = os.path.splitext(filename)
@@ -24,10 +24,10 @@ def upscale_video(input_path, height, keep_original, output_format, algorithm, m
             f' ghcr.io/k4yt3x/video2x:6.4.0'
             f' -i {quote_path("/input/" + filename)}'
             f' -o {quote_path("/output/" + temp_name)}'
-            f' -p {algorithm} --{algorithm}-model {model} -h {height}'
+            f' -p {algorithm} --{algorithm}-model {model} -s {scale}'
         )
 
-        print(f"Upscaling {filename} to {height}p with {algorithm} ({model})...")
+        print(f"Upscaling {filename} {scale}x with {algorithm} ({model})...")
         subprocess.run(docker_command, shell=True, check=True)
 
         # Rename temp file to final name in output directory
@@ -40,9 +40,9 @@ def upscale_video(input_path, height, keep_original, output_format, algorithm, m
         quoted_input_path = quote_path(os.path.basename(input_path))
         quoted_output_path = quote_path(os.path.basename(output_path))
 
-        docker_command = f'docker run --gpus all --rm -v {quote_path(input_directory)}:/host ghcr.io/k4yt3x/video2x:6.4.0 -i {quoted_input_path} -o {quoted_output_path} -p {algorithm} --{algorithm}-model {model} -h {height}'
+        docker_command = f'docker run --gpus all --rm -v {quote_path(input_directory)}:/host ghcr.io/k4yt3x/video2x:6.4.0 -i {quoted_input_path} -o {quoted_output_path} -p {algorithm} --{algorithm}-model {model} -s {scale}'
 
-        print(f"Upscaling {filename} to {height}p with {algorithm} ({model})...")
+        print(f"Upscaling {filename} {scale}x with {algorithm} ({model})...")
         subprocess.run(docker_command, shell=True, check=True)
 
         if keep_original:
@@ -52,20 +52,20 @@ def upscale_video(input_path, height, keep_original, output_format, algorithm, m
             os.remove(input_path)
             os.rename(output_path, input_path)
 
-def process_directory(directory, height, input_format, output_format, keep_original, algorithm, model, output_dir=None):
+def process_directory(directory, scale, input_format, output_format, keep_original, algorithm, model, output_dir=None):
     for filename in os.listdir(directory):
         if filename.endswith(input_format):
             input_path = os.path.join(directory, filename)
-            upscale_video(input_path, height, keep_original, output_format, algorithm, model, output_dir)
+            upscale_video(input_path, scale, keep_original, output_format, algorithm, model, output_dir)
 
-def process_file(file_path, height, output_format, keep_original, algorithm, model, output_dir=None):
-    upscale_video(file_path, height, keep_original, output_format, algorithm, model, output_dir)
+def process_file(file_path, scale, output_format, keep_original, algorithm, model, output_dir=None):
+    upscale_video(file_path, scale, keep_original, output_format, algorithm, model, output_dir)
 
 def main():
     parser = argparse.ArgumentParser(description='Upscale video files using Docker and video2x.')
     parser.add_argument('-d', '--directory', type=str, help='Directory containing video files to process')
     parser.add_argument('-p', '--path', type=str, help='Path to a single video file to process')
-    parser.add_argument('-t', '--height', type=int, default=720, help='Height of the output file')
+    parser.add_argument('-s', '--scale', type=int, default=2, choices=[2, 3, 4], help='Scale factor (default: 2)')
     parser.add_argument('-i', '--inputformat', type=str, help='Input file format to process (required with -d)')
     parser.add_argument('-o', '--outputformat', type=str, help='Desired output file format (defaults to same as input format if not specified)')
     parser.add_argument('-k', '--keep', action='store_true', help='Keep the original file, renamed with .temp extension')
@@ -116,9 +116,9 @@ def main():
         parser.error(f"Output directory does not exist: {args.output_dir}")
 
     if args.directory:
-        process_directory(args.directory, args.height, args.inputformat, args.outputformat, args.keep, args.algorithm, args.model, args.output_dir)
+        process_directory(args.directory, args.scale, args.inputformat, args.outputformat, args.keep, args.algorithm, args.model, args.output_dir)
     elif args.path:
-        process_file(args.path, args.height, args.outputformat, args.keep, args.algorithm, args.model, args.output_dir)
+        process_file(args.path, args.scale, args.outputformat, args.keep, args.algorithm, args.model, args.output_dir)
     else:
         parser.error('Either a directory (-d) or a single file path (-p) must be provided.')
 

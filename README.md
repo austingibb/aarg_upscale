@@ -26,19 +26,19 @@ To be added later, as of now not supported. May be possible to do any combinatio
 
 ## Usage
 
-Upscale all .avi files in a directory to 1080p and convert them to .mp4, keeping the original files:
+Upscale all .avi files in a directory 2x and convert them to .mp4, keeping the original files:
 ```
-python aarg_upscale.py -d some/directory -t 1080 -i .avi -o .mp4 -k
-```
-
-Upscale a single video file to 720p using realcugan instead of the default realesrgan:
-```
-python aarg_upscale.py -p some/directory/video.avi -t 720 -o .mp4 -a realcugan
+python aarg_upscale.py -d some/directory -i .avi -o .mp4 -k
 ```
 
-Upscale with a specific model:
+Upscale a single video file 4x using realcugan:
 ```
-python aarg_upscale.py -p some/directory/video.avi -t 1080 -a realesrgan -m realesrgan-x4plus-anime
+python aarg_upscale.py -p some/directory/video.avi -s 4 -o .mp4 -a realcugan
+```
+
+Upscale with a specific model and output to a different directory:
+```
+python aarg_upscale.py -p some/directory/video.avi -s 2 -a realesrgan -m realesrgan-x4plus-anime -O /output/dir
 ```
 
 ## License
