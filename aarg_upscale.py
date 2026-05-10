@@ -3,7 +3,8 @@ import os
 import subprocess
 
 def quote_path(path):
-    """Encloses the path in quotes to handle spaces."""
+    """Encloses the path in quotes to handle spaces, normalizing for Docker on Windows."""
+    path = path.replace('\\', '/').rstrip('/')
     return f'"{path}"'
 
 def upscale_video(input_path, height, keep_original, output_format, algorithm, model, output_dir=None):
